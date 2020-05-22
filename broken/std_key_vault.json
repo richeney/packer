@@ -1,0 +1,53 @@
+{
+    "_comment1": "Yeah, this won't work. Only supported vaults are:",
+    "_comment2": "* Hashicorp Vault:     https://www.packer.io/docs/templates/user-variables/#vault-variables",
+    "_comment3": "* AWS Secrets Manager: https://www.packer.io/docs/templates/user-variables/#aws-secrets-manager-variables",
+    "_comment4": "  which is added here: https://github.com/hashicorp/packer/tree/master/template/interpolate/aws/secretsmanager",
+    "variables": {
+        "tenant_id": "{{ vault `https://terraformwlbepd40ne76h31.vault.azure.net/` `tenant-id` }}",
+        "subscription_id": "{{ vault `https://terraformwlbepd40ne76h31.vault.azure.net/` `subscription-id` }}",
+        "client_id": "{{ vault `https://terraformwlbepd40ne76h31.vault.azure.net/` `client-id` }}",
+        "client_secret": "{{ vault `https://terraformwlbepd40ne76h31.vault.azure.net/` `client-secret` }}"
+    },
+    "builders": [
+        {
+            "type": "azure-arm",
+            "client_id": "{{user `client_id`}}",
+            "client_secret": "{{user `client_secret`}}",
+            "subscription_id": "{{user `subscription_id`}}",
+            "tenant_id": "{{user `tenant_id`}}",
+            "managed_image_resource_group_name": "images",
+            "managed_image_name": "std_env_vars",
+            "os_type": "Linux",
+            "image_publisher": "Canonical",
+            "image_offer": "UbuntuServer",
+            "image_sku": "18.04-LTS",
+            "azure_tags": {
+                "dept": "Testing",
+                "task": "Image Deployment"
+            },
+            "location": "westeurope",
+            "vm_size": "Standard_B1s"
+        }
+    ],
+    "provisioners": [
+        {
+            "execute_command": "chmod +x {{ .Path }}; {{ .Vars }} sudo -E sh '{{ .Path }}'",
+            "inline": [
+                "apt-get update",
+                "apt-get upgrade -y",
+                "apt-get install git jq tree wget lolcat aptitude stress -y"
+            ],
+            "inline_shebang": "/bin/sh -x",
+            "type": "shell"
+        },
+        {
+            "execute_command": "chmod +x {{ .Path }}; {{ .Vars }} sudo -E sh '{{ .Path }}'",
+            "inline": [
+                "/usr/sbin/waagent -force -deprovision+user && export HISTSIZE=0 && sync"
+            ],
+            "inline_shebang": "/bin/sh -x",
+            "type": "shell"
+        }
+    ]
+}

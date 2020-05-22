@@ -1,0 +1,46 @@
+{
+    "_comments1": "Authenticates interactively to create mgmt and vault tokens.",
+    "_comments2": "Specify subscription_id, e.g. `packer build -var subscription_id=$(az account show --output tsv --query id) std_token.json`",
+    "_comments3": "Subsequent runs in the same tenant should discover the tokens in /home/richeney/.azure/packer/",
+    "variables": {
+        "subscription_id": ""
+    },
+    "builders": [
+        {
+            "type": "azure-arm",
+            "subscription_id": "{{user `subscription_id`}}",
+            "managed_image_resource_group_name": "images",
+            "managed_image_name": "std_token",
+            "os_type": "Linux",
+            "image_publisher": "Canonical",
+            "image_offer": "UbuntuServer",
+            "image_sku": "18.04-LTS",
+            "azure_tags": {
+                "dept": "Testing",
+                "task": "Image Deployment"
+            },
+            "location": "westeurope",
+            "vm_size": "Standard_B1s"
+        }
+    ],
+    "provisioners": [
+        {
+            "execute_command": "chmod +x {{ .Path }}; {{ .Vars }} sudo -E sh '{{ .Path }}'",
+            "inline": [
+                "apt-get update",
+                "apt-get upgrade -y",
+                "apt-get install git jq tree wget lolcat aptitude stress -y"
+            ],
+            "inline_shebang": "/bin/sh -x",
+            "type": "shell"
+        },
+        {
+            "execute_command": "chmod +x {{ .Path }}; {{ .Vars }} sudo -E sh '{{ .Path }}'",
+            "inline": [
+                "/usr/sbin/waagent -force -deprovision+user && export HISTSIZE=0 && sync"
+            ],
+            "inline_shebang": "/bin/sh -x",
+            "type": "shell"
+        }
+    ]
+}

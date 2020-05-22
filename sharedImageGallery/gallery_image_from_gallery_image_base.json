@@ -1,0 +1,68 @@
+{
+    "variables": {
+        "tenant_id": "{{env `ARM_TENANT_ID`}}",
+        "subscription_id": "{{env `ARM_SUBSCRIPTION_ID`}}",
+        "client_id": "{{env `ARM_CLIENT_ID`}}",
+        "client_secret": "{{env `ARM_CLIENT_SECRET`}}"
+    },
+    "builders": [
+        {
+            "type": "azure-arm",
+            "client_id": "{{user `client_id`}}",
+            "client_secret": "{{user `client_secret`}}",
+            "subscription_id": "{{user `subscription_id`}}",
+            "tenant_id": "{{user `tenant_id`}}",
+            "managed_image_resource_group_name": "images",
+            "managed_image_name": "ansible",
+            "shared_image_gallery": {
+                "subscription": "{{user `subscription_id`}}",
+                "resource_group": "images",
+                "gallery_name": "customImages",
+                "image_name": "ubuntuBase",
+                "image_version": "1.0.0"
+            },
+            "shared_image_gallery_destination": {
+                "resource_group": "images",
+                "gallery_name": "sharedImageGallery",
+                "image_name": "ubuntuAnsible",
+                "image_version": "1.0.0",
+                "replication_regions": [
+                    "westeurope",
+                    "northeurope"
+                ]
+            },
+            "azure_tags": {
+                "dept": "Testing",
+                "task": "Image Deployment"
+            },
+            "location": "westeurope",
+            "vm_size": "Standard_B1s"
+        }
+    ],
+    "provisioners": [
+        {
+            "type": "ansible",
+            "user": "packer",
+            "playbook_file": "/etc/ansible/install_ansible.yml",
+            "ansible_env_vars": [
+                "ANSIBLE_HOST_KEY_CHECKING=False",
+                "ANSIBLE_SSH_ARGS='-o ForwardAgent=yes -o ControlMaster=auto -o ControlPersist=60s'",
+                "ANSIBLE_NOCOLOR=True",
+                "ANSIBLE_NOCOWS=1"
+            ]
+        },
+        {
+            "type": "ansible-local",
+            "playbook_files": "/etc/ansible/config_mgmt.yml",
+            "galaxy_file": "/etc/ansible/config_mgmt.requirements.yml"
+        },
+        {
+            "execute_command": "chmod +x {{ .Path }}; {{ .Vars }} sudo -E sh '{{ .Path }}'",
+            "inline": [
+                "/usr/sbin/waagent -force -deprovision+user && export HISTSIZE=0 && sync"
+            ],
+            "inline_shebang": "/bin/sh -x",
+            "type": "shell"
+        }
+    ]
+}

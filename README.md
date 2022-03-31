@@ -1,31 +1,36 @@
 # Packer
 
-Set of reference files for Packer on Azure. Packer is commonly used to generate custom virtual machine images.
+Set of example files for Packer on Azure.
+
+Packer is commonly used to generate custom virtual machine images.
 
 Images may be standalone resources, or versioned images stored in an Azure Compute Gallery (formerly known as Shared Image Gallery).
 
 ## Authentication
 
-There are a few ways to authenticate to Azure when running Packer build and these examples show the difference and when each is commonly used.
+There are a few ways to authenticate to Azure when running Packer. These examples show the differences and when each option is commonly used.
 
 | Authentication Type | Description |
 |---|---|
-| [interactive](auth/auth/interactive/README.md) | Interactive login |
-| [azure_cli_token](auth/auth/azure_cli_token/README.md) | Manually test image builds from your local system |
+| [interactive](auth/interactive/README.md) | Interactive login |
+| [azure_cli_token](auth/azure_cli_token/README.md) | Manually test image builds from your local system |
 | [managed_identity](auth/managed_identity/README.md) | As above, but run on a config management server or in Cloud Shell |
 | [service_principal](auth/service_principal/README.md) | Suitable for production image creation CI/CD pipelines |
 
-All of the examples above will create the same Ubuntu 20.04 custom image.
+> All of the examples above will create the same Ubuntu 20.04 custom image.
 
 ## Scenarios
 
-Examples of additional scenarios. All of the examples below authenticate using service principal variables.
+Additional scenarios. The examples below authenticate using service principal variables and assume subscription level Contributor access.
 
 | Scenario | Description |
 |---|---|
-| [service_principal_gallery](service_principal_gallery/README.md) | As above, with additional Azure Compute Gallery publishing step |
+| [azure_compute_gallery](scenarios/azure_compute_gallery/README.md) | Additional Azure Compute Gallery publishing step |
+| [image_to_image](scenarios/azure_compute_gallery/README.md) | Use a custom image as the source and layer additional customisations  |
+| [image_to_gallery](scenarios/azure_compute_gallery/README.md) | As above, with additional Azure Compute Gallery publishing step |
+| [gallery_to_gallery](scenarios/azure_compute_gallery/README.md) | As above, using a gallery image as the source |
 
-More to be added, e.g. custom image to custom image, custom image to gallery image, gallery image to gallery image, cloud-init, Ansible, etc.
+More to be added, e.g. Windows, cloud-init, Ansible, etc.
 
 > Raise an issue if there is a specific scenario that you would like to see.
 

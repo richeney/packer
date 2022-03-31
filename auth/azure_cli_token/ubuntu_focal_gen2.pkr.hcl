@@ -1,4 +1,6 @@
 source "azure-arm" "ubuntu_focal_gen2" {
+  use_azure_cli_auth = true
+
   os_type = "Linux"
   image_publisher = "Canonical"
   image_offer = "0001-com-ubuntu-server-focal"
@@ -9,7 +11,7 @@ source "azure-arm" "ubuntu_focal_gen2" {
 
   azure_tags = {
     "source" = "Packer"
-    "file" = "managed_identity/ubuntu_focal_gen2.pkr.hcl"
+    "file" = "auth/azure_cli_token/ubuntu_focal_gen2.pkr.hcl"
   }
 
   managed_image_resource_group_name = "images"

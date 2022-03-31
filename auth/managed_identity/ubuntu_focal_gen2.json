@@ -12,7 +12,7 @@
 
       "azure_tags": {
         "source": "Packer",
-        "file": "managed_identity/ubuntu_focal_gen2.json"
+        "file": "auth/managed_identity/ubuntu_focal_gen2.json"
       },
 
       "managed_image_resource_group_name": "images",

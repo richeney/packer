@@ -1,8 +1,7 @@
 {
     "builders": [{
       "type": "azure-arm",
-
-      "use_azure_cli_auth": true,
+      "subscription_id": "your_subscription_id",
 
       "os_type": "Linux",
       "image_publisher": "Canonical",
@@ -14,7 +13,7 @@
 
       "azure_tags": {
         "source": "Packer",
-        "file": "azure_cli_token/ubuntu_focal_gen2.json"
+        "file": "auth/interactive/ubuntu_focal_gen2.json"
       },
 
       "managed_image_resource_group_name": "images",

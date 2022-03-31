@@ -1,8 +1,6 @@
 # Service Principal Gallery
 
-See the main [README.md](../README.md) for details on creating and using service principals.
-
-This example creates the image and then publishes to an Azure Compute Gallery (previously called Shared Image Gallery).
+This example creates the image and then publishes to an Azure Compute Gallery (previously called Shared Image Gallery). Assumes all [setup](../../README.md#setup) steps are complete
 
 1. Create the image definition
 

@@ -19,7 +19,7 @@ A more granular approach is to follow *option 2* and limit the Contributor acces
     * *Option 1*: Subscription scope
 
       ```shell
-      scopes=$(az account show --query id --output tsv)
+      scopes="/subscriptions/$(az account show --query id --output tsv)"
       ```
 
     * *Option 2*: Specific resource groups

@@ -1,4 +1,4 @@
-# Service Principal Gallery
+# Azure Compute Gallery
 
 This example creates the image and then publishes to an Azure Compute Gallery (previously called Shared Image Gallery). Assumes all [setup](../../README.md#setup) steps are complete
 
@@ -15,7 +15,7 @@ This example creates the image and then publishes to an Azure Compute Gallery (p
     Fully pathed:
 
     ```shell
-    packer build ~/packer/service_principal_gallery
+    packer build ~/packer/scenarios/azure_compute_gallery
     ```
 
     Or, if in the directory:

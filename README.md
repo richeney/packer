@@ -107,7 +107,7 @@ Run the following commands if you are using the Azure Compute Gallery examples.
 1. Get the resource ID
 
     ```shell
-    galleryId=$(az sig show --gallery-name $gallery --resource-group gallery --query id --output tsv)
+    galleryId=$(az sig show --gallery-name gallery --resource-group gallery --query id --output tsv)
     ```
 
 ## Links
